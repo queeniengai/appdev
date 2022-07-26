@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
-import { Text, Avatar } from 'react-native-elements';
+import { Text, Avatar, ListItem, Button } from 'react-native-elements';
 
-// import MyListItem from '../components/MyListItem';
 
-export default function HomeScreen() {
+export default function StackHomeScreen({navigation}) {
 
   // add states for fetch process
   const [error, setError] = useState(null);
@@ -32,14 +31,14 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
         <Text style={styles.heading}>Hello!</Text>
-        {displayRecipe(error, isLoaded, recipeResult)}
+        {displayRecipe(error, isLoaded, recipeResult, navigation)}
     </View>
   );
 }
 
-function displayRecipe(error, isLoaded, recipeResult ){
+function displayRecipe(error, isLoaded, recipeResult, navigation ){
   const renderItem = ({ item }) => (
-    <ListItem key={item.idMeal}>
+    <ListItem key={item.idMeal} navigation={navigation}>
         <Avatar source={{ uri: item.strMealThumb }} />
         <ListItem.Content>
           <ListItem.Title>{item.strMeal}</ListItem.Title>
@@ -54,8 +53,8 @@ function displayRecipe(error, isLoaded, recipeResult ){
         buttonStyle={{
           backgroundColor: '#F79292',
           borderRadius: 20,
-        }
-        }
+        }}
+        onPress={() => navigation.navigate('Recipe')}
       />
     </ListItem>
   );
@@ -77,7 +76,7 @@ function displayRecipe(error, isLoaded, recipeResult ){
       </View>
     );
   }
-  else if(recipeResult.meals === undefined){
+  else if(recipeResult === undefined){
     // no recipes
     return(
       <View>
